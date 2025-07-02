@@ -7,7 +7,7 @@
     <meta name="keywords" content="construction, contractor, builder, site management, project tracking, real-time updates, resource management" />
     <meta name="author" content="Nirmaan" />
     <title>Nirmaan - Construction Site Management Platform</title>
-    <link rel="icon" href="{{ asset('storage/favicon.png') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png" />
     <link rel="canonical" href="{{ url()->current() }}" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
