@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Project;
+use Illuminate\Support\Facades\Storage;
 
 class OwnerDashboardController extends Controller
 {
-    // OwnerDashboardController.php
     public function index()
     {
         return view('owner.dashboard', [
@@ -17,7 +16,6 @@ class OwnerDashboardController extends Controller
             'notificationCount' => 5,
         ]);
     }
-
 
     public function projects() {
         return view('owner.projects');
@@ -31,6 +29,7 @@ class OwnerDashboardController extends Controller
         return view('owner.help');
     }
 
+
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -40,16 +39,29 @@ class OwnerDashboardController extends Controller
             'last_name'  => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email,' . $user->id,
             'phone'      => 'nullable|string|max:20',
-            'profile_picture' => 'nullable|image|max:2048'
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        // Profile picture upload/update
         if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->store('profiles', 'public');
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
             $user->profile_picture = $path;
         }
 
-        $user->update($request->only('first_name', 'last_name', 'email', 'phone'));
+        $user->first_name = $request->first_name;
+        $user->last_name  = $request->last_name;
+        $user->email      = $request->email;
+        $user->phone      = $request->phone;
+        $user->save();
 
-        return response()->json(['status' => 'success']);
+        return response()->json([
+            'message' => 'Profile updated successfully!',
+            'profile_picture_url' => $user->profile_picture ? asset('storage/' . $user->profile_picture) : null
+        ]);
     }
 }
+

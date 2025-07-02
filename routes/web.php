@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\ContractorDashboardController;
 use App\Http\Controllers\OwnerProjectController;
@@ -12,6 +13,7 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
 // Show forms
 Route::get('/signup', [AuthController::class, 'showSignupForm'])->name('signup');
@@ -32,7 +34,8 @@ Route::prefix('owner')->middleware(['auth', 'role:Owner'])->group(function () {
     Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('update-project');
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('delete-project');
     Route::get('/help', [OwnerDashboardController::class, 'help'])->name('help');
-    Route::post('/profile-update', [OwnerDashboardController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/update', [OwnerDashboardController::class, 'updateProfile'])->name('profile.update');
+
 });
 
 
